@@ -1,0 +1,66 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.quickActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.section {
+  margin-top: 40px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sectionHead h2 {
+  font-size: 20px;
+}
+
+.sectionHead a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rose-deep);
+}
+
+.todayOutfit {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.todayThumb {
+  width: 120px;
+  height: 150px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, var(--blush), var(--cream));
+  flex-shrink: 0;
+}
+
+@media (max-width: 780px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .todayOutfit {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,39 @@
+.empty {
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  border-radius: 20px;
+  padding: 56px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--rose-deep);
+}
+
+.title {
+  font-size: 19px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--ink-soft);
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+.action {
+  margin-top: 6px;
+}

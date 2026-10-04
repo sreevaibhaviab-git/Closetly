@@ -1,0 +1,164 @@
+{
+  "updatedAt": "2026-07-18T08:42:06.755Z",
+  "createdAt": "2026-07-16T13:10:13.035Z",
+  "id": "XMXwluuLV5uWVNqJ",
+  "name": "AI Chatbot",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "closetly-stylist",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6686025d-79cb-4195-8923-e1a3b35faafc",
+      "name": "Webhook",
+      "webhookId": "297ac418-1146-405f-a8e0-baae5458608d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\n// Possible Gemini response structures\nconst parts =\n  input?.content?.parts ??\n  input?.candidates?.[0]?.content?.parts ??\n  input?.response?.candidates?.[0]?.content?.parts ??\n  input?.output?.content?.parts ??\n  input?.parts ??\n  [];\n\n// Find the generated image\nconst imagePart = parts.find((part) => {\n  return (\n    part?.inlineData?.data ||\n    part?.inline_data?.data\n  );\n});\n\nif (!imagePart) {\n  const textPart = parts.find((part) => part?.text);\n\n  throw new Error(\n    `Gemini did not return an image. Response: ${\n      textPart?.text || JSON.stringify(input)\n    }`\n  );\n}\n\nconst inlineData =\n  imagePart.inlineData ??\n  imagePart.inline_data;\n\nconst mimeType =\n  inlineData.mimeType ??\n  inlineData.mime_type ??\n  \"image/png\";\n\nconst base64Data = inlineData.data;\n\nif (!base64Data) {\n  throw new Error(\"Gemini image data is empty.\");\n}\n\n// Return an image URL that Closetly can display directly\nconst imageUrl = `data:${mimeType};base64,${base64Data}`;\n\nreturn [\n  {\n    json: {\n      success: true,\n      imageUrl,\n      mimeType,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        0
+      ],
+      "id": "d3badff4-352f-4a49-a197-f302006f74f0",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "1999798a-4295-4048-992c-93e33b421493",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.1-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ `\nYou are Closetly, a refined personal fashion stylist.\n\nYou must respond using the user's real wardrobe and saved style preferences.\n\nCURRENT USER MESSAGE:\n${$json.body.message}\n\nCURRENT DATE:\n${$json.body.currentDate}\n\nAVAILABLE WARDROBE:\n${JSON.stringify($json.body.wardrobe ?? [], null, 2)}\n\nCURRENT STYLE MEMORY:\n${JSON.stringify($json.body.preferences ?? {}, null, 2)}\n\nRECENT CHAT HISTORY:\n${JSON.stringify($json.body.history ?? [], null, 2)}\n\nYour responsibilities:\n\n1. Reply naturally, warmly and concisely.\n2. Give useful fashion advice based on the user's actual wardrobe.\n3. Never claim the user owns an item that is not in AVAILABLE WARDROBE.\n4. Detect new likes, dislikes and temporary restrictions from the current message.\n5. Respect all existing preferences from CURRENT STYLE MEMORY.\n6. If the user asks to stop recommending something for a number of days, calculate the exact end date from CURRENT DATE.\n7. Do not use markdown tables.\n8. Do not include explanations outside the JSON.\n9. Return valid JSON only.\n\nExamples:\n\nUser says:\n\"I hate yellow.\"\n\nMemory:\navoid_colors should contain \"yellow\".\n\nUser says:\n\"Stop recommending shorts.\"\n\nMemory:\navoid_items should contain \"shorts\".\n\nUser says:\n\"Stop recommending shorts for five days.\"\n\nMemory:\ntemporary_avoidances should contain:\n{\n  \"term\": \"shorts\",\n  \"until\": \"YYYY-MM-DD\"\n}\n\nUser says:\n\"I love quiet luxury.\"\n\nMemory:\npreferred_styles should contain \"quiet luxury\".\n\nUser says:\n\"I prefer oversized shirts.\"\n\nMemory:\npreferred_items should contain \"oversized shirts\".\n\nUser says:\n\"I only wear silver jewellery.\"\n\nMemory:\npreferred_items should contain \"silver jewellery\".\n\nUser says:\n\"I am bloated today.\"\n\nAdd a short useful note such as:\n\"prefer relaxed silhouettes today\"\n\nReturn exactly this JSON structure:\n\n{\n  \"reply\": \"A concise and natural personal stylist response.\",\n  \"memory_patch\": {\n    \"avoid_items\": [],\n    \"avoid_colors\": [],\n    \"preferred_items\": [],\n    \"preferred_colors\": [],\n    \"preferred_styles\": [],\n    \"notes\": [],\n    \"temporary_avoidances\": []\n  }\n}\n\nMemory rules:\n\n- Include only new preferences detected in the current user message.\n- Use lowercase values.\n- Use empty arrays when there is nothing new to save.\n- Never repeat the full existing memory inside memory_patch.\n- Never remove existing preferences.\n- temporary_avoidances must use YYYY-MM-DD.\n- reply must be plain text.\n- Return JSON only.\n` }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        16
+      ],
+      "id": "981bebb1-6bf9-406f-8cb9-565d8cac5c51",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "33MeYdxhkYgYc7iE",
+          "name": "Google Gemini(PaLM) Api account 12"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "20401387-0bed-43e4-bdb6-87fc6f7f0e88",
+  "activeVersionId": "20401387-0bed-43e4-bdb6-87fc6f7f0e88",
+  "versionCounter": 23,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-16T13:10:13.049Z",
+      "createdAt": "2026-07-16T13:10:13.049Z",
+      "role": "workflow:owner",
+      "workflowId": "XMXwluuLV5uWVNqJ",
+      "projectId": "CZyGliydAQXqQHLD",
+      "project": {
+        "updatedAt": "2026-05-18T15:15:04.939Z",
+        "createdAt": "2026-03-26T13:26:07.144Z",
+        "id": "CZyGliydAQXqQHLD",
+        "name": "Sree Vaibhavi <sreevaibhaviab@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "40f350bf-a8df-4353-9048-646fb3a68587"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version 20401387",
+    "description": ""
+  }
+}

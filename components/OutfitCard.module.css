@@ -1,0 +1,128 @@
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 34px -20px rgba(36, 30, 25, 0.35);
+}
+
+.collage {
+  min-height: 230px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background: var(--cream);
+}
+
+.imageCell {
+  min-height: 115px;
+  overflow: hidden;
+  border-right: 1px solid rgba(36, 30, 25, 0.06);
+  border-bottom: 1px solid rgba(36, 30, 25, 0.06);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  min-height: 115px;
+  object-fit: cover;
+  display: block;
+}
+
+.emptyPreview {
+  grid-column: 1 / -1;
+  min-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--rose-deep);
+}
+
+.body {
+  padding: 20px;
+}
+
+.headingRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.date {
+  margin-top: 5px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.match {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--blush);
+  color: var(--rose-deep);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 5px 10px;
+  border-radius: 100px;
+  background: var(--cream);
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.reason {
+  margin-top: 16px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.tip {
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.deleteButton {
+  width: 100%;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rose-deep);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.deleteButton:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}

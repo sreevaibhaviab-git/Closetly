@@ -1,0 +1,135 @@
+{
+  "updatedAt": "2026-07-18T09:22:03.081Z",
+  "createdAt": "2026-07-17T17:27:28.562Z",
+  "id": "nQR9NyHIafG09lJv",
+  "name": "AI TRYON",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "closetly-try-on",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7b52bd40-ace2-483d-84ee-a13bb93f6921",
+      "name": "Webhook",
+      "webhookId": "2c7a3508-f195-45a4-a40e-926f87958878"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1040,
+        -16
+      ],
+      "id": "fb4415ce-ed57-47cc-ae30-50ed56ffc5aa",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-lite-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.1-flash-lite-image"
+        },
+        "prompt": "=Create a realistic full-body virtual try-on fashion image.\n\nUse the person shown in this avatar image:\n{{ $('Webhook').item.json.body.avatar_url }}\n\nPreserve the same person\u2019s face, skin tone, hairstyle, age and body proportions.\n\nThe outfit title is:\n{{ $('Webhook').item.json.body.outfit_title }}\n\nThe supplied wardrobe items are:\n{{ JSON.stringify($('Webhook').item.json.body.items) }}\n\nUse only the supplied wardrobe items. Do not invent or replace clothing.\n\nPreserve the exact garment colours, patterns, textures, logos, sleeve lengths, necklines and design details.\n\nOccasion:\n{{ $('Webhook').item.json.body.occasion }}\n\nStyle:\n{{ $('Webhook').item.json.body.vibe }}\n\nTime of day:\n{{ $('Webhook').item.json.body.time_of_day }}\n\nFormality:\n{{ $('Webhook').item.json.body.formality }}\n\nAdditional description:\n{{ $('Webhook').item.json.body.description }}\n\nCreate one photorealistic luxury editorial fashion image with:\n\n- full body visible\n- natural lighting\n- clean neutral background\n- realistic fabric folds\n- correct anatomy\n- natural hands and feet\n- no text\n- no watermark\n- no extra people\n- no collage",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0569cd26-7e51-49ed-b03c-2ad8b7211588",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YM88tJD6l2kz3CIE",
+          "name": "Google Gemini(PaLM) Api account 13"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "440e82c3-131d-4909-965b-29c6eaa18d57",
+  "activeVersionId": "440e82c3-131d-4909-965b-29c6eaa18d57",
+  "versionCounter": 72,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-17T17:27:28.582Z",
+      "createdAt": "2026-07-17T17:27:28.582Z",
+      "role": "workflow:owner",
+      "workflowId": "nQR9NyHIafG09lJv",
+      "projectId": "CZyGliydAQXqQHLD",
+      "project": {
+        "updatedAt": "2026-05-18T15:15:04.939Z",
+        "createdAt": "2026-03-26T13:26:07.144Z",
+        "id": "CZyGliydAQXqQHLD",
+        "name": "Sree Vaibhavi <sreevaibhaviab@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "40f350bf-a8df-4353-9048-646fb3a68587"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version 440e82c3",
+    "description": ""
+  }
+}

@@ -1,0 +1,76 @@
+.wrap {
+  min-height: calc(100vh - 76px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: var(--blush);
+  opacity: 0.35;
+  filter: blur(100px);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: flex;
+  gap: 14px;
+}
+
+.submit {
+  margin-top: 8px;
+}
+
+.footerText {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin-top: 26px;
+}
+
+.footerText a {
+  color: var(--rose-deep);
+  font-weight: 600;
+}

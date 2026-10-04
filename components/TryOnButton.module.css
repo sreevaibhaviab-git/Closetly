@@ -1,0 +1,266 @@
+.tryOnButton {
+  min-height: 42px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--rose-deep);
+  border-radius: 999px;
+  background: var(--blush);
+  color: var(--rose-deep);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tryOnButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--paper);
+  box-shadow: 0 10px 24px -16px
+    rgba(36, 30, 25, 0.45);
+}
+
+.tryOnButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.spinner {
+  animation: spin 0.85s linear infinite;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(28, 23, 20, 0.58);
+  backdrop-filter: blur(8px);
+}
+
+.modal {
+  width: min(620px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: var(--paper);
+  box-shadow: 0 30px 80px
+    rgba(20, 16, 14, 0.3);
+}
+
+.header {
+  padding: 21px 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  color: var(--rose-deep);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 5px;
+  font-family: var(--font-fraunces);
+  font-size: clamp(22px, 4vw, 30px);
+  line-height: 1.15;
+}
+
+.closeButton {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.closeButton:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.content {
+  padding: 22px;
+}
+
+.loadingPanel,
+.errorPanel {
+  min-height: 360px;
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 21px;
+  background: var(--cream);
+}
+
+.loadingIcon {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--blush);
+  color: var(--rose-deep);
+}
+
+.loadingTitle,
+.errorTitle {
+  margin-top: 18px;
+  font-family: var(--font-fraunces);
+  font-size: 22px;
+}
+
+.loadingText,
+.errorText {
+  max-width: 390px;
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.avatarLink,
+.retryButton,
+.regenerateButton {
+  min-height: 40px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--rose-deep);
+  border-radius: 999px;
+  background: var(--rose-deep);
+  color: white;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.avatarLink,
+.retryButton {
+  margin-top: 20px;
+}
+
+.resultPanel {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 21px;
+  background: var(--cream);
+}
+
+.imageFrame {
+  width: 100%;
+  min-height: 420px;
+  background: var(--cream);
+}
+
+.resultImage {
+  width: 100%;
+  height: auto;
+  max-height: 68vh;
+  display: block;
+  object-fit: contain;
+}
+
+.resultFooter {
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.resultTitle {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.resultText {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.regenerateButton {
+  flex: 0 0 auto;
+  background: var(--blush);
+  color: var(--rose-deep);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .modal {
+    max-height: calc(100vh - 24px);
+    border-radius: 24px 24px 18px 18px;
+  }
+
+  .header,
+  .content {
+    padding: 17px;
+  }
+
+  .loadingPanel,
+  .errorPanel {
+    min-height: 320px;
+  }
+
+  .imageFrame {
+    min-height: 340px;
+  }
+
+  .resultFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .regenerateButton {
+    width: 100%;
+  }
+
+  .tryOnButton {
+    width: 100%;
+  }
+}

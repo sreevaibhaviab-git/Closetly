@@ -1,0 +1,39 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.input {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: var(--ink);
+  width: 100%;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+
+.input::placeholder {
+  color: var(--taupe);
+}
+
+.input:hover {
+  border-color: var(--rose);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--rose-deep);
+  box-shadow: 0 0 0 3px rgba(190, 131, 126, 0.16);
+}

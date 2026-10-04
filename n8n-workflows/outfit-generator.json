@@ -1,0 +1,164 @@
+{
+  "updatedAt": "2026-07-16T16:11:40.094Z",
+  "createdAt": "2026-07-15T14:04:22.270Z",
+  "id": "qBk8O0mhZx6Xypfs",
+  "name": "Outfit generator",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "closetly-outfit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9b85aede-cb85-4da1-8dad-02026cd62cc1",
+      "name": "Webhook",
+      "webhookId": "fc5c0345-c9bb-47e7-a306-5c8932221a32"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-lite",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.1-flash-lite"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ `\nYou are Closetly, an expert personal fashion stylist.\n\nCreate one complete outfit using ONLY the wardrobe items supplied.\n\nCURRENT DATE:\n${$json.body.currentDate}\n\nUSER REQUEST:\nOccasion: ${$json.body.occasion}\nVibe: ${$json.body.vibe}\nTime of day: ${$json.body.timeOfDay}\nFormality: ${$json.body.formality}\nExtra description: ${$json.body.description || \"None\"}\n\nCURRENT WEATHER:\n${JSON.stringify($json.body.weather ?? null, null, 2)}\n\nAVAILABLE WARDROBE:\n${JSON.stringify($json.body.wardrobe ?? [], null, 2)}\n\nSAVED STYLE MEMORY:\n${JSON.stringify($json.body.preferences ?? {}, null, 2)}\n\nRECENT OUTFIT FEEDBACK:\n${JSON.stringify($json.body.feedback ?? [], null, 2)}\n\nYour task:\n\nCreate the best complete outfit for the user's request while respecting their wardrobe, saved style preferences, ratings and current weather.\n\nInstructions:\n\n1. Use only exact item IDs from AVAILABLE WARDROBE.\n2. Never invent clothes, shoes, bags, jewellery or accessories.\n3. Never use anything listed under avoid_items or avoid_colors.\n4. Never use any active temporary_avoidances.\n5. Prioritise preferred_items, preferred_colors and preferred_styles when suitable.\n6. Prefer wardrobe items marked is_favorite=true when they fit the request.\n7. Learn from RECENT OUTFIT FEEDBACK:\n   - \"love\" means similar colours, styles and item combinations may be preferred.\n   - \"not_my_style\" means avoid repeating the same combination or a strongly similar look.\n8. Choose one top plus one bottom, or one dress.\n9. Never choose both a dress and a separate top-bottom combination.\n10. Add shoes when suitable and available.\n11. Add a bag, jacket, jewellery or accessories only when suitable and available.\n12. Match the occasion, vibe, formality and time of day.\n13. Respect CURRENT WEATHER when it is available.\n14. For hot weather, prioritise breathable, lightweight and relaxed items.\n15. For humid weather, avoid heavy, tight or non-breathable combinations.\n16. For cool or cold weather, use suitable layers, jackets, knitwear or closed shoes when available.\n17. For rain or a high rain probability:\n    - prefer practical or quick-drying items;\n    - prefer suitable closed or water-resistant shoes when available;\n    - avoid delicate suede;\n    - avoid impractical floor-length hems;\n    - mention carrying an umbrella or rain layer in styling_tip when useful.\n18. For strong wind, avoid unsecured scarves, loose hats and impractical flowing pieces.\n19. For a high UV index, mention sunglasses or sun protection when suitable.\n20. Never select an item only because of the requested vibe when it conflicts with weather, restrictions or formality.\n21. Do not repeat a recently disliked outfit combination.\n22. Keep the outfit coordinated in colour, silhouette and level of formality.\n23. Return JSON only.\n24. Do not include markdown, code fences or any text outside the JSON.\n\nReturn exactly this structure:\n\n{\n  \"title\": \"short outfit title\",\n  \"item_ids\": [\n    \"exact wardrobe item id\"\n  ],\n  \"reason\": \"brief explanation of why the outfit works for the occasion, style preferences and weather\",\n  \"styling_tip\": \"one practical styling suggestion\",\n  \"confidence\": 90,\n  \"preferences_applied\": [\n    \"preferred quiet luxury\",\n    \"avoided yellow\",\n    \"used breathable pieces for warm weather\",\n    \"considered high rain probability\",\n    \"prioritised favourite item\"\n  ]\n}\n\nRules for item_ids:\n\n- Every value must exactly match an id from AVAILABLE WARDROBE.\n- Never return item names instead of IDs.\n- Do not include duplicate IDs.\n- Include only items that form one wearable outfit.\n- If a suitable complete outfit cannot be created, choose the strongest available combination rather than inventing anything.\n\nRules for reason:\n\n- Keep it concise.\n- Mention the occasion and requested vibe.\n- Mention weather only when it meaningfully affected the outfit.\n- Mention saved preferences only when they meaningfully affected the outfit.\n\nRules for styling_tip:\n\n- Give one useful finishing suggestion.\n- It may mention jewellery, layering, an umbrella, sunglasses, a hairstyle or how to wear one of the selected items.\n- Do not suggest an additional clothing item unless it exists in AVAILABLE WARDROBE.\n- Non-wardrobe essentials such as an umbrella or sunscreen may be suggested when weather requires them.\n\nRules for confidence:\n\n- Return a number from 0 to 100.\n- Use a higher score when the wardrobe contains a strong match for the request.\n- Use a lower score when categories are missing or compromises were necessary.\n\nRules for preferences_applied:\n\n- Include only factors that actually affected the selection.\n- Include both saved preference decisions and important weather decisions.\n- Use short, readable phrases.\n- Do not include generic statements.\n- Return an empty array if no preference, rating or weather factor influenced the outfit.\n` }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d5c1a919-84bf-4649-acfd-e6984ab6e6c3",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NL9w9ugp7a87VYaN",
+          "name": "Google Gemini(PaLM) Api account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nlet outfit =\n  input.outfit ??\n  input.output ??\n  input.response ??\n  input.content ??\n  input;\n\nif (outfit?.content?.parts?.[0]?.text) {\n  outfit = outfit.content.parts[0].text;\n}\n\nif (outfit?.parts?.[0]?.text) {\n  outfit = outfit.parts[0].text;\n}\n\nif (outfit?.text) {\n  outfit = outfit.text;\n}\n\nif (typeof outfit === \"string\") {\n  const cleaned = outfit\n    .replace(/```json/gi, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\n  try {\n    outfit = JSON.parse(cleaned);\n  } catch {\n    throw new Error(\n      `Gemini returned invalid JSON: ${cleaned}`\n    );\n  }\n}\n\nif (\n  !outfit?.title ||\n  !Array.isArray(outfit?.item_ids)\n) {\n  throw new Error(\n    `Gemini response is missing title or item_ids: ${JSON.stringify(\n      outfit\n    )}`\n  );\n}\n\nreturn [\n  {\n    json: {\n      success: true,\n      outfit: {\n        title: String(outfit.title),\n        item_ids: outfit.item_ids,\n        reason: String(\n          outfit.reason ?? \"\"\n        ),\n        styling_tip: String(\n          outfit.styling_tip ?? \"\"\n        ),\n        confidence: Number(\n          outfit.confidence ?? 0\n        ),\n        preferences_applied:\n          Array.isArray(\n            outfit.preferences_applied\n          )\n            ? outfit.preferences_applied\n            : [],\n      },\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        0
+      ],
+      "id": "965e3d3f-f9e7-488c-94a4-a5ed2bd3401b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        624,
+        0
+      ],
+      "id": "9de3fcb5-216c-498c-981e-3a9f524adb74",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "3cf4481a-0f68-45bb-8dd7-b0df9fc4b079",
+  "activeVersionId": "3cf4481a-0f68-45bb-8dd7-b0df9fc4b079",
+  "versionCounter": 28,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-07-15T14:04:22.282Z",
+      "createdAt": "2026-07-15T14:04:22.282Z",
+      "role": "workflow:owner",
+      "workflowId": "qBk8O0mhZx6Xypfs",
+      "projectId": "CZyGliydAQXqQHLD",
+      "project": {
+        "updatedAt": "2026-05-18T15:15:04.939Z",
+        "createdAt": "2026-03-26T13:26:07.144Z",
+        "id": "CZyGliydAQXqQHLD",
+        "name": "Sree Vaibhavi <sreevaibhaviab@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "40f350bf-a8df-4353-9048-646fb3a68587"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version 3cf4481a",
+    "description": ""
+  }
+}

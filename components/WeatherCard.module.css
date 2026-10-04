@@ -1,0 +1,209 @@
+.card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(232, 205, 196, 0.34),
+      transparent 42%
+    ),
+    var(--paper);
+}
+
+.top {
+  padding: 21px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.temperatureRow {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.weatherIcon {
+  color: var(--rose-deep);
+}
+
+.temperature {
+  font-family: var(--font-fraunces);
+  font-size: 42px;
+  line-height: 0.95;
+}
+
+.condition {
+  margin-top: 5px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.refreshButton,
+.retryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.refreshButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.retryButton {
+  gap: 7px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.metrics {
+  padding: 0 21px 20px;
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric {
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(36, 30, 25, 0.07);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.metricIcon {
+  color: var(--rose-deep);
+}
+
+.metricLabel {
+  color: var(--ink-soft);
+  font-size: 10px;
+}
+
+.metricValue {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.advice {
+  padding: 19px 21px 21px;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.adviceEyebrow,
+.adviceLabel {
+  color: var(--rose-deep);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.summary {
+  margin-top: 7px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.adviceGroup {
+  margin-top: 15px;
+}
+
+.tags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.tag {
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.carry {
+  margin-top: 16px;
+  padding: 11px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border-radius: 13px;
+  background: var(--blush);
+  color: var(--rose-deep);
+}
+
+.carry svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.carry p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.loading {
+  min-height: 235px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.loading p {
+  max-width: 320px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
